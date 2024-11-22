@@ -1,6 +1,6 @@
 #include "Transaction.h"
 
-Transaction::Transaction() : transactionId(0), subaccount(""), amount(0.0), type('D') {}
+Transaction::Transaction() : transactionId(0), account(""), amount(0.0), type('D') {}
 
 Transaction::Transaction(int transactionId, const string &subaccount, double amount, char type)
 {
@@ -9,7 +9,7 @@ Transaction::Transaction(int transactionId, const string &subaccount, double amo
 
 // Getters
 int Transaction::getTransactionId() const { return transactionId; }
-string Transaction::getTransactionSubaccount() const { return subaccount; }
+string Transaction::getTransactionAccount() const { return account; }
 double Transaction::getTransactionAmount() const { return amount; }
 char Transaction::getTransactionType() const { return type; }
 
@@ -19,9 +19,9 @@ void Transaction::setTransactionId(int transactionId)
     this->transactionId = transactionId;
 }
 
-void Transaction::setTransactionSubAccount(const string &subaccount)
+void Transaction::setTransactionAccount(const string &subaccount)
 {
-    this->subaccount = subaccount;
+    this->account = subaccount;
 }
 
 void Transaction::setTransactionAmount(double amount)
@@ -45,7 +45,7 @@ void Transaction::setTransactionType(char type)
 void Transaction::setTransaction(int transactionId, const string &subaccount, double amount, char type)
 {
     setTransactionId(transactionId);
-    setTransactionSubAccount(subaccount);
+    setTransactionAccount(subaccount);
     setTransactionAmount(amount);
     setTransactionType(type);
 }
@@ -54,7 +54,7 @@ void Transaction::setTransaction(int transactionId, const string &subaccount, do
 ostream &operator<<(ostream &os, const Transaction &transaction)
 {
     os << "Transaction ID: " << transaction.transactionId
-       << ", Subaccount: " << transaction.subaccount
+       << ", Account: " << transaction.account
        << ", Amount: " << transaction.amount
        << ", Type: " << (transaction.type == 'D' ? "Debit" : "Credit");
     return os;
@@ -65,8 +65,8 @@ istream &operator>>(istream &is, Transaction &transaction)
     cout << "Enter Transaction ID: ";
     is >> transaction.transactionId;
 
-    cout << "Enter Subaccount: ";
-    is >> transaction.subaccount;
+    cout << "Enter account: ";
+    is >> transaction.account;
 
     cout << "Enter Amount: ";
     is >> transaction.amount;
