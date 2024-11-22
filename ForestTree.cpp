@@ -1,4 +1,5 @@
 #include "ForestTree.h"
+#include <cstddef>
 
 // constructor to initialize the tree
 ForestTree::ForestTree() : root(nullptr) {}
@@ -56,11 +57,37 @@ bool ForestTree::insert(FNodePtr& current, const Account& account) {
         return true;
     }
 
+    // check if it is the same account (either same id or same description)
+    if (current->data.getAccountNumber() == account.getAccountNumber() || current->data.getDescription() == account.getDescription()) {
+        cout << "Account already exists. id and description should be unique!" << endl;
+        return false;
+    }
+
     // Check if the current node is the parent of the account
     if (isChild(current->data, account)) {
         // Recur to the next level (left child)
         return insert(current->left, account);
     } else {
+        FNodePtr temp = nullptr;
+        // this here is making an error in the tree structure, needs to be fixed
+        // // check if the 1st child is bigger than the account
+        // if (current->left != nullptr && current->left->data.getAccountNumber() > account.getAccountNumber()) {
+        //     // insert the account as the child of the current node
+        //     temp = current->left; // Save the child of the current node
+        //     current->left = new ForestNode(account); // Insert the account node
+        //     current->left->right = temp; // link the child to the new node created as a sibling
+        //     return true;
+        // }
+
+        // check if next sibling is bigger than the account
+        if (current->right != nullptr && current->right->data.getAccountNumber() > account.getAccountNumber()) {
+            // insert the account as the sibling of the current node
+            temp = current->right; // Save the sibling of the current node
+            current->right = new ForestNode(account); // Insert the account node
+            current->right->right = temp; // link the sibling to the new node created
+            return true;
+        }
+
         // Otherwise, move to the next sibling
         return insert(current->right, account);
     }
@@ -71,7 +98,8 @@ void ForestTree::printTree() const {
     if (root == nullptr) {
         cout << "Tree is empty." << endl;
     } else {
-        printTree(root, 0, "");
+        printTree(root, 0, "|_ ");
+        cout << endl << "End of Tree" << endl;
     }
 }
 
@@ -83,7 +111,7 @@ void ForestTree::printTree(FNodePtr node, int level, string prefix) const {
 
     // Indent according to the level
     for (int i = 0; i < level; ++i) {
-        cout << "|    "; // 4 spaces for each level
+        cout << "|     "; // 5 spaces
     }
 
     // Print current node
