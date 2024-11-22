@@ -1,87 +1,40 @@
-#ifndef FORRESTTREE_H
-#define FORRESTTREE_H
+#ifndef FORESTTREE_H
+#define FORESTTREE_H
 
 #include <iostream>
+#include "Account.h"
 using namespace std;
 
-template <typename ElementType>
 class ForestTree {
-    private:
-    // class for a node in the tree
+private:
+    // Inner class for a node in the tree
     class ForestNode {
-        public:
-            ElementType data; // data of the node
-            ForestNode* left; // pointer to first child in the next level
-            ForestNode* right; // pointer to sibling in the same level
+    public:
+        Account data;      // Node data
+        ForestNode* left;  // First child (next level)
+        ForestNode* right; // Next sibling (same level)
 
-            // constructor to initialize the node
-            ForestNode(ElementType data) {
-                this->data = data;
-                left = nullptr;
-                right = nullptr;
-        }
+        // Constructor
+        ForestNode(const Account& data) : data(data), left(nullptr), right(nullptr) {}
     };
 
-    typedef ForestNode * FNodePtr; ;
-    FNodePtr root; // pointer to the root of the tree
+    typedef ForestNode* FNodePtr;
+    FNodePtr root; // Root of the tree
 
-    public: 
-        ForestTree();
-        ~ForestTree();
-        bool isEmpty();
-        bool insert(ElementType& data);   
-        bool remove(ElementType& data);
-        bool search(ElementType& data);
+public:
+    ForestTree();
+    ~ForestTree();
 
-    private:
-        bool insert(FNodePtr& root, ElementType& data);
+    FNodePtr getRoot() const;
+    bool isEmpty() const;
+    bool insert(const Account& account);
+    void printTree() const;
+
+private:
+    void destroy(FNodePtr node); // Helper to clean up memory
+    bool insert(FNodePtr& current, const Account& account);
+    bool isChild(const Account& parent, const Account& potentialChild) const;
+    void printTree(FNodePtr node, int level, string prefix) const;
 };
 
-#endif // end of FORRESTTREE_H
-
-/*Starting the implementation of the ForestTree class
-************************************************************/
-
-// constructor to initialize the tree
-template <typename ElementType>
-ForestTree<ElementType>::ForestTree() {
-    root = nullptr;
-}
-
-// destructor to delete the tree
-template <typename ElementType>
-ForestTree<ElementType>::~ForestTree() {
-    // to be implemented
-}
-
-// function to check if the tree is empty
-template <typename ElementType>
-bool ForestTree<ElementType>::isEmpty() {
-    return root == nullptr;
-}
-
-// function to insert a new node in the tree
-template <typename ElementType>
-bool ForestTree<ElementType>::insert(ElementType& data) {
-    // base case: if the tree is empty
-    if (isEmpty()) {
-        root = new ForestNode(data);
-        return true;
-    }
-
-    // recursive case: if the tree is not empty
-    return insert(root, data);
-}
-
-// helper function to insert a new node in the tree
-template <typename ElementType>
-bool ForestTree<ElementType>::insert(FNodePtr& root, ElementType& data) {
-    // if the data is already in the tree
-    if (root->data == data) {
-        return false;
-    }
-
-    // still did not implement the rest lol
-}
-
-/*End of the implementation of the ForestTree class */
+#endif // end of FORESTTREE_H
