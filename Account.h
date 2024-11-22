@@ -20,16 +20,13 @@ public:
     string getDescription() const;
     double getBalance() const;
     const vector<Transaction*>& getTransactions() const;  // Returns the vector of transaction pointers
-    const vector<Account*>& getSubAccounts() const;
 
     // Setter Methods
     void setAccountNumber(int accountNumber);
     void setDescription(const string &description);
     void setBalance(double balance);
     void addTransaction(Transaction* transaction);  // Adds a transaction pointer
-    void addSubAccount(Account* subAccount);
 
-    bool isChildOf(const Account &parentAccount) const;
 
     // Overloaded Operators
     friend ostream &operator<<(ostream &os, const Account &account);
@@ -40,7 +37,6 @@ private:
     string description;
     double balance;
     vector<Transaction*> transactions; 
-    vector<Account*> subAccounts; 
 };
 
 #endif

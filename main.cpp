@@ -21,26 +21,17 @@ int main() {
     // Create subaccounts and add them to the main account
     Account subAccount1(11, "Subaccount 1", 500.0);
     Account subAccount2(12, "Subaccount 2", 200.0);
-    account.addSubAccount(&subAccount1); // Adding Subaccount1
-    account.addSubAccount(&subAccount2); // Adding Subaccount2
+    
 
     // Output account details
     cout << "Account Details: " << endl;
     cout << account << endl;
 
-    // Display the subaccounts of the main account
-    cout << "Subaccounts of Main Account: ";
-    for (Account* sub : account.getSubAccounts()) {
-        cout << sub->getAccountNumber() << " "; // Output the subaccount numbers
-    }
+    
+   
     cout << endl;
 
-    // Test isChildOf() method
-    if (subAccount1.isChildOf(account)) {
-        cout << "Subaccount1 is a child of Main Account." << endl;
-    } else {
-        cout << "Subaccount1 is NOT a child of Main Account." << endl;
-    }
+    
 
     // Test input and output using overloaded operators
     Account inputAccount;

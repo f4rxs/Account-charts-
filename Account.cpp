@@ -23,9 +23,7 @@ const vector<Transaction*>& Account::getTransactions() const {
     return transactions;
 }
 
-const vector<Account*>& Account::getSubAccounts() const {
-    return subAccounts;
-}
+
 
 // Setter Methods
 void Account::setAccountNumber(int accountNumber) {
@@ -44,15 +42,9 @@ void Account::addTransaction(Transaction* transaction) {
     transactions.push_back(transaction);  // Adds the transaction pointer to the vector
 }
 
-void Account::addSubAccount(Account* subAccount) {
-    subAccounts.push_back(subAccount);  // Adds the subaccount pointer to the vector
-}
+
 
 // Method to check if an account is a child of another
-bool Account::isChildOf(const Account &parentAccount) const {
-    // Logic for determining if this account is a child of the parent account
-    return false;  // Placeholder for actual logic
-}
 
 // Overloaded Operators
 ostream &operator<<(ostream &os, const Account &account) {
@@ -62,23 +54,17 @@ ostream &operator<<(ostream &os, const Account &account) {
     
       os << "Transactions: " << endl;
     for (Transaction* trans : account.transactions) {
-        os << "Transaction ID: " << trans->getTransactionId() << ", "
-           << "Subaccount: " << trans->getTransactionSubaccount() << ", "
-           << "Amount: " << trans->getTransactionAmount() << ", "
-           << "Type: " << trans->getTransactionType() << endl;
+         os <<*trans <<endl;
     }
 
-    os << "Subaccounts: ";
-    for (Account* sub : account.subAccounts) {
-        os << sub->getAccountNumber() << " ";
-    }
+   
     os << endl;
 
     return os;
 }
 
 istream &operator>>(istream &is, Account &account) {
-    cout << "Enter Account Number: ";
+    cout << "\nEnter Account Number: ";
     is >> account.accountNumber;
     cout << "Enter Description: ";
     is.ignore();
