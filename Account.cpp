@@ -7,63 +7,85 @@ Account::Account(int accountNumber, const string &description, double balance)
     : accountNumber(accountNumber), description(description), balance(balance) {}
 
 // Getter Methods
-int Account::getAccountNumber() const {
+int Account::getAccountNumber() const
+{
     return accountNumber;
 }
 
-string Account::getDescription() const {
+string Account::getDescription() const
+{
     return description;
 }
 
-double Account::getBalance() const {
+double Account::getBalance() const
+{
     return balance;
 }
 
-const vector<Transaction*>& Account::getTransactions() const {
+const vector<Transaction *> &Account::getTransactions() const
+{
     return transactions;
 }
 
-
-
 // Setter Methods
-void Account::setAccountNumber(int accountNumber) {
+void Account::setAccountNumber(int accountNumber)
+{
     this->accountNumber = accountNumber;
 }
 
-void Account::setDescription(const string &description) {
+void Account::setDescription(const string &description)
+{
     this->description = description;
 }
 
-void Account::setBalance(double balance) {
+void Account::setBalance(double balance)
+{
     this->balance = balance;
 }
 
-void Account::addTransaction(Transaction* transaction) {
-    transactions.push_back(transaction);  // Adds the transaction pointer to the vector
+void Account::addTransaction(Transaction *transaction)
+{
+    transactions.push_back(transaction); // Adds the transaction pointer to the vector
 }
 
+bool Account::operator==(const Account &other) const
+{
+    return (this->accountNumber == other.accountNumber ||
+            this->description == other.description);
+}
 
+bool Account::operator>(const Account &other) const
+{
+    return this->balance > other.balance;
+}
+
+bool Account::operator<(const Account &other) const
+{
+    return this->balance < other.balance;
+}
 
 // Method to check if an account is a child of another
 
 // Overloaded Operators
-ostream &operator<<(ostream &os, const Account &account) {
+ostream &operator<<(ostream &os, const Account &account)
+{
     os << "Account Number: " << account.accountNumber
        << ", Description: " << account.description
        << ", Balance: " << account.balance << endl;
-    
-      os << "Transactions: " << endl;
-    for (Transaction* trans : account.transactions) {
-         os <<*trans <<endl;
+
+    os << "Transactions: " << endl;
+    for (Transaction *trans : account.transactions)
+    {
+        os << *trans << endl;
     }
 
-   
     os << endl;
 
     return os;
 }
 
-istream &operator>>(istream &is, Account &account) {
+istream &operator>>(istream &is, Account &account)
+{
     cout << "\nEnter Account Number: ";
     is >> account.accountNumber;
     cout << "Enter Description: ";

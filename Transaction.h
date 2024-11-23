@@ -27,6 +27,10 @@ public:
     friend ostream &operator<<(ostream &os, const Transaction &transaction);
     friend istream &operator>>(istream &is, Transaction &transaction);
 
+    bool operator==(const Transaction &other)const;
+    bool operator>(const Transaction &other)const;
+    bool operator<(const Transaction &other) const;
+
 private:
     int transactionId;
     string account;
