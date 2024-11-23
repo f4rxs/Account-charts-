@@ -178,38 +178,53 @@ ForestTree::FNodePtr ForestTree::findNode(FNodePtr current,
 }
 
 // function to delete an account from the tree and his children
+// bool ForestTree::deleteAccount(int accountNumber) {
+//   // check if the account is at the root
+//   if (root->data.getAccountNumber() == accountNumber) {
+//     destroy(root);
+//     root = nullptr;
+//     return true;
+//   }
+
+//   FNodePtr temp;
+//   // if account is on the first level
+//   if (accountNumber < 10) {
+//     // traverse the 1st level to find the account
+//     temp = root;
+//     while (temp != nullptr) {
+//       if (temp->data.getAccountNumber() == accountNumber) {
+//         destroy(temp);
+//         return true;
+//       }
+//       temp = temp->left;
+//     }
+//   }
+
+//   // find the account
+//   temp = findNode(root, accountNumber);
+//   // if found
+//   if (temp != nullptr) {
+//     destroy(temp);
+//     return true;
+//   }
+
+//   // account not found
+//   return false;
+// }
+
 bool ForestTree::deleteAccount(int accountNumber) {
-  // check if the account is at the root
-  if (root->data.getAccountNumber() == accountNumber) {
-    destroy(root);
-    root = nullptr;
-    return true;
-  }
-
-  FNodePtr temp;
-  // if account is on the first level
-  if (accountNumber < 10) {
-    // traverse the 1st level to find the account
-    temp = root;
-    while (temp != nullptr) {
-      if (temp->data.getAccountNumber() == accountNumber) {
-        destroy(temp);
+    // Check if the account is at the root
+    if (root != nullptr && root->data.getAccountNumber() == accountNumber) {
+        destroy(root);
+        root = nullptr;
         return true;
-      }
-      temp = temp->left;
     }
-  }
 
-  // find the account
-  temp = findNode(root, accountNumber);
-  // if found
-  if (temp != nullptr) {
-    destroy(temp);
-    return true;
-  }
+    // Call the recursive delete function to search and delete the account in all subtrees
+    root = findNodeAndDelete(root, accountNumber);
 
-  // account not found
-  return false;
+    // If root is still the same, account was not found or deleted
+    return root != nullptr;
 }
 
 // Public function to print the tree
@@ -368,4 +383,25 @@ void ForestTree::generateAccountReport(int accountNumber) const {
   }
 
   generateReportFile(accountNode);
+}
+
+
+ForestTree::FNodePtr ForestTree::findNodeAndDelete(FNodePtr node, int accountNumber) {
+    // Base case: if the node is null, return null
+    if (node == nullptr) {
+        return nullptr;
+    }
+
+    // If the current node's account matches, delete it
+    if (node->data.getAccountNumber() == accountNumber) {
+        destroy(node);  // delete the current node and its children
+        return nullptr;  // return null to indicate this node is deleted
+    }
+
+    // Recursively search in the left and right subtrees
+    node->left = findNodeAndDelete(node->left, accountNumber);
+    node->right = findNodeAndDelete(node->right, accountNumber);
+    
+    // Return the potentially updated node (after recursion)
+    return node;
 }

@@ -61,6 +61,8 @@ private:
   FNodePtr findParent(FNodePtr current, int accountNumber, int level) const;
   // Helper function to find a node with a given account number
   FNodePtr findNode(FNodePtr current, int accountNumber) const;
+
+  FNodePtr findNodeAndDelete(FNodePtr node, int accountNumber);
   // Helper function to print the tree
   void printTree(FNodePtr node, int level, string prefix) const;
   // Helper function to save the nodes to genrate accounts
@@ -70,6 +72,8 @@ private:
                        int level) const;
   // Helper function function for the generate Account Report
   void generateReportFile(ForestTree::FNodePtr accountNode) const;
+
+
 };
 
 #endif

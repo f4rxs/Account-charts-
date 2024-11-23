@@ -15,16 +15,24 @@ int main()
     string fileName = "resources/accounts.txt";
     string fileNameToSaved = "resources/savedAccounts.txt";
     readAccountsFromFile(fileName, forestTree);
-
+    forestTree.deleteAccount(80265);
+    // forestTree.printTree();
+    // forestTree.deleteAccount(1);
     forestTree.printTree();
 
-    forestTree.saveToFile(fileNameToSaved);
+    // forestTree.saveToFile(fileNameToSaved);
 
-        forestTree = ForestTree();
-    cout<<"Reading from the saved file"<<endl;
-    readAccountsFromFile(fileNameToSaved,forestTree);
+    //     forestTree = ForestTree();
+    // cout<<"Reading from the saved file"<<endl;
+    // readAccountsFromFile(fileNameToSaved,forestTree);
 
-   forestTree.generateAccountReport(forestTree);
+
+// int accountNumber;
+// cout<<"Enter an account number to generate a report";
+// cin>>accountNumber;
+
+
+//    forestTree.generateAccountReport(accountNumber);
 
 
 
@@ -59,7 +67,7 @@ int main()
 void readAccountsFromFile(const string &fileName, ForestTree &forestTree)
 {
     string filePath = fileName;
-    cout << "Attempting to open file: DS-Lebanese-Accounts/accounts.txt" << endl;
+    cout << "Attempting to open file: "<<filePath << endl;
     // Open the file
     ifstream file(filePath);
     if (!file.is_open())
