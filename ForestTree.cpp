@@ -52,6 +52,8 @@ bool ForestTree::insert(const Account& account) {
 // helper function to insert an account in the tree
 bool ForestTree::insert(FNodePtr& current, const Account& account) {
     // If the current node is nullptr, insert here
+
+    cout << "Inserting account: " << account.getAccountNumber() << endl;
     if (current == nullptr) {
         current = new ForestNode(account);
         return true;
