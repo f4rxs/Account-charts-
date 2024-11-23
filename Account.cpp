@@ -56,12 +56,12 @@ bool Account::operator==(const Account &other) const
 
 bool Account::operator>(const Account &other) const
 {
-    return this->balance > other.balance;
+    return this->accountNumber > other.accountNumber;
 }
 
 bool Account::operator<(const Account &other) const
 {
-    return this->balance < other.balance;
+    return this->accountNumber < other.accountNumber;
 }
 
 // Method to check if an account is a child of another
