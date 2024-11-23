@@ -22,17 +22,18 @@ ForestTree::FNodePtr ForestTree::getRoot() const { return root; }
 // check if the tree is empty
 bool ForestTree::isEmpty() const { return root == nullptr; }
 
-// function to check if an account is a sub-account of another (his child)
-bool ForestTree::isChild(const Account &parent,
-                         const Account &potentialChild) const {
-  string parentStr = to_string(parent.getAccountNumber());
-  string childStr = to_string(potentialChild.getAccountNumber());
-  cout << "Parent: " << parentStr
-       << " Child substring: " << childStr.substr(0, parentStr.size()) << endl;
-  cout << "is he the child? "
-       << ((childStr.substr(0, parentStr.size()) == parentStr) ? "yes" : "No")
-       << endl;
-  return childStr.substr(0, parentStr.size()) == parentStr;
+// function to check if an account is a child of another account
+bool ForestTree::isChild(int accountNumber, int subAccountNumber) const {
+
+  subAccountNumber /= 10;
+  while (subAccountNumber > 0) {
+    if (subAccountNumber == accountNumber) {
+      return true;
+    }
+    subAccountNumber /= 10;
+  }
+
+  return false;
 }
 
 // function to insert an account (node) in the tree
@@ -41,30 +42,29 @@ bool ForestTree::insert(const Account &account) {
     root = new ForestNode(account);
     return true;
   }
-  cout << "Inserting account: " << account.getAccountNumber() << endl;
-  return insert(root, account);
-}
+  // check if the account is on the 1st level so technically no parent
+  if (account.getAccountNumber() < 10) {
+    return insert(root, account);
+  }
 
-// if the account is not on the 1st level
-// find the parent of the account
-FNodePtr parent = findParent(root, account.getAccountNumber());
-if (parent == nullptr) {
-  cout << "\nParent account not found for account: "
-       << account.getAccountNumber()
-       << "\nParent account: " << account.getAccountNumber() / 10
-       << " should exist first before inserting this account."
-       << "\nAborting insertion...\n"
-       << endl;
-  return false;
-}
-return insert(parent, account);
+  // if the account is not on the 1st level
+  // find the parent of the account
+  FNodePtr parent = findParent(root, account.getAccountNumber());
+  if (parent == nullptr) {
+    cout << "\nParent account not found for account: "
+         << account.getAccountNumber()
+         << "\nParent account: " << account.getAccountNumber() / 10
+         << " should exist first before inserting this account."
+         << "\nAborting insertion...\n"
+         << endl;
+    return false;
+  }
+  return insert(parent, account);
 }
 
 // helper function to insert an account in the tree
 bool ForestTree::insert(FNodePtr &current, const Account &account) {
   // If the current node is nullptr, insert here
-
-  cout << "Inserting account: " << account.getAccountNumber() << endl;
   if (current == nullptr) {
     current = new ForestNode(account);
     return true;
@@ -73,33 +73,34 @@ bool ForestTree::insert(FNodePtr &current, const Account &account) {
   // check if it is the same account (either same id or same description)
   if (current->data.getAccountNumber() == account.getAccountNumber() ||
       current->data.getDescription() == account.getDescription()) {
-    cout << "Account already exists. id and description should be unique!"
+    cout << "\nAccount already exists. id and description should be unique!"
          << endl;
     return false;
   }
 
   // Check if the current node is the parent of the account
-  if (isChild(current->data, account)) {
+  if (isChild(current->data.getAccountNumber(), account.getAccountNumber())) {
     // check if the 1st child is bigger than the account
-    if (current->left != nullptr &&
-        current->left->data.getAccountNumber() > account.getAccountNumber()) {
+    if (current->right != nullptr &&
+        current->right->data.getAccountNumber() > account.getAccountNumber()) {
       // insert the account as the child of the current node
-      FNodePtr temp = current->left; // Save the child of the current node
-      current->left = new ForestNode(account); // Insert the account node
-      current->left->right =
+      FNodePtr temp = current->right; // Save the child of the current node
+      current->right = new ForestNode(account); // Insert the account node
+      current->right->left =
           temp; // link the child to the new node created as a sibling
       return true;
     }
-    // Recur to the next level (left child)
-    return insert(current->left, account);
+    // Recur to the next level (right child)
+    return insert(current->right, account);
+
   } else {
     // check if next sibling is bigger than the account
-    if (current->right != nullptr &&
-        current->right->data.getAccountNumber() > account.getAccountNumber()) {
+    if (current->left != nullptr &&
+        current->left->data.getAccountNumber() > account.getAccountNumber()) {
       // insert the account as the sibling of the current node
-      FNodePtr temp = current->right; // Save the sibling of the current node
-      current->right = new ForestNode(account); // Insert the account node
-      current->right->right = temp; // link the sibling to the new node created
+      FNodePtr temp = current->left; // Save the sibling of the current node
+      current->left = new ForestNode(account); // Insert the account node
+      current->left->left = temp; // link the sibling to the new node created
       return true;
     }
 
@@ -162,7 +163,7 @@ ForestTree::FNodePtr ForestTree::findNode(FNodePtr current,
 // Public function to print the tree
 void ForestTree::printTree() const {
   if (root == nullptr) {
-    cout << "Tree is empty." << endl;
+    cout << "\nTree is empty." << endl;
   } else {
     printTree(root, 0, "|_ ");
     cout << endl << "End of Tree" << endl;
@@ -185,13 +186,13 @@ void ForestTree::printTree(FNodePtr node, int level, string prefix) const {
        << node->data.getDescription() << " (" << node->data.getBalance() << ")"
        << endl;
 
-  // Recursively print children (left subtree)
-  if (node->left != nullptr) {
-    printTree(node->left, level + 1, "|_ ");
+  // Recursively print children (right subtree)
+  if (node->right != nullptr) {
+    printTree(node->right, level + 1, "|_ ");
   }
 
-  // Recursively print siblings (right subtree at the same level)
-  if (node->right != nullptr) {
-    printTree(node->right, level, "|_ ");
+  // Recursively print siblings (left subtree at the same level)
+  if (node->left != nullptr) {
+    printTree(node->left, level, "|_ ");
   }
 }
