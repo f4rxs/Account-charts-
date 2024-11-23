@@ -39,7 +39,7 @@ void Transaction::setTransactionType(char type)
     {
         throw invalid_argument("Transaction type must be 'D' (Debit) or 'C' (Credit).");
     }
-    this->type = toupper(type); 
+    this->type = toupper(type);
 }
 
 void Transaction::setTransaction(int transactionId, const string &subaccount, double amount, char type)
@@ -48,6 +48,21 @@ void Transaction::setTransaction(int transactionId, const string &subaccount, do
     setTransactionAccount(subaccount);
     setTransactionAmount(amount);
     setTransactionType(type);
+}
+
+bool Transaction::operator==(const Transaction &other) const
+{
+    return this->transactionId == other.transactionId;
+}
+
+bool Transaction::operator>(const Transaction &other) const
+{
+    return this->amount > other.amount;
+}
+
+bool Transaction::operator<(const Transaction &other) const
+{
+    return this->amount < other.amount;
 }
 
 // Overloaded Operators
@@ -84,7 +99,7 @@ istream &operator>>(istream &is, Transaction &transaction)
         throw invalid_argument("Transaction type must be 'D' (Debit) or 'C' (Credit).");
     }
 
-    transaction.type = toupper(transaction.type); 
+    transaction.type = toupper(transaction.type);
 
     return is;
 }

@@ -32,6 +32,12 @@ public:
     friend ostream &operator<<(ostream &os, const Account &account);
     friend istream &operator>>(istream &is, Account &account);
 
+    bool operator==(const Account &other) const;
+    bool operator>(const Account &other) const;
+    bool operator<(const Account &other) const;
+    
+
+
 private:
     int accountNumber;
     string description;
