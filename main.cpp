@@ -7,16 +7,16 @@
 
 using namespace std;
 
-void readAccountsFromFile(const string &folderNamem, const string &fileName, ForestTree &forestTree);
+void readAccountsFromFile(const string &fileName, ForestTree &forestTree);
 int main()
 {
 ForestTree forestTree;
 
-string folderName = "DS-Lebanese-Accounts\\resources";  
-    string fileName = "accounts.txt";   
+  
+    string fileName = "resources/accounts.txt";   
 
 
-   readAccountsFromFile(folderName, fileName, forestTree);
+   readAccountsFromFile(fileName, forestTree);
 
 forestTree.printTree();
 
@@ -54,9 +54,9 @@ forestTree.printTree();
     return 0;
 }
 
-void readAccountsFromFile(const string &folderName, const string &fileName, ForestTree &forestTree)
+void readAccountsFromFile(const string &fileName, ForestTree &forestTree)
 {
-    string filePath = folderName + "/" + fileName;
+    string filePath = fileName;
     cout << "Attempting to open file: DS-Lebanese-Accounts/accounts.txt" << endl;
     // Open the file
     ifstream file(filePath);
