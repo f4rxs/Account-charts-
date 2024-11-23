@@ -52,5 +52,21 @@ int main() {
   // Print the tree structure
   cout << "Tree Structure:" << endl;
   tree.printTree();
+
+  // Find an account
+  cout << "\nFinding account with id 1111..." << endl;
+  Account *acc = tree.findAccount(1111);
+  if (acc != nullptr) {
+    cout << "Account found: " << acc->getAccountNumber() << " "
+         << acc->getDescription() << " (" << acc->getBalance() << ")" << endl;
+  } else {
+    cout << "Account not found." << endl;
+  }
+
+  // delete an account
+  cout << "\nDeleting account with id 12..." << endl;
+  tree.deleteAccount(12);
+  cout << "Tree Structure after deleting account with id 12:" << endl;
+  tree.printTree();
   return 0;
 }
