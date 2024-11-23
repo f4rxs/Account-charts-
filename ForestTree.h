@@ -6,12 +6,10 @@
 
 using namespace std;
 
-class ForestTree
-{
+class ForestTree {
 private:
   // Inner class for a node in the tree
-  class ForestNode
-  {
+  class ForestNode {
   public:
     Account data;      // Node data
     ForestNode *left;  // Sibling (same level)
@@ -44,13 +42,10 @@ public:
   bool deleteAccount(int accountNumber);
   // function to print the tree
   void printTree() const;
-<<<<<<< Updated upstream
   // finction to save into a file
   void saveToFile(const string &fileName) const;
- void generateAccountReport(ForestTree &forestTree) const;
-=======
+  void generateAccountReport(int accountNumber) const;
 
->>>>>>> Stashed changes
 private:
   // Helper function to delete from a specific node
   void destroy(FNodePtr &node);
@@ -59,25 +54,21 @@ private:
   // Helper function to check if an account is a child (subAccount) of another
   // account
   bool isChild(int accountNumber, int subAccountNumber) const;
-<<<<<<< Updated upstream
-=======
 
   // Helper function to check if an account is an ancestor of another account
   bool isAncestor(int ancestorNumber, int accountNumber) const;
   // Helper function to find the parent node of a given account
   FNodePtr findParent(FNodePtr current, int accountNumber, int level) const;
->>>>>>> Stashed changes
   // Helper function to find a node with a given account number
   FNodePtr findNode(FNodePtr current, int accountNumber) const;
   // Helper function to print the tree
   void printTree(FNodePtr node, int level, string prefix) const;
-  //Helper function to find the parent node
-  FNodePtr findParent(FNodePtr current, int accountNumber, int level) const;
-  //Helper function to save the nodes to genrate accounts
+  // Helper function to save the nodes to genrate accounts
   void saveNodeRecursive(ofstream &outFile, FNodePtr node, int level) const;
-  //Helper function to save subaccounts to genrate accounts
-  void saveSubAccounts(ofstream &reportFile, ForestTree::FNodePtr node, int level) const;
-  //Helper function function for the generate Account Report
+  // Helper function to save subaccounts to genrate accounts
+  void saveSubAccounts(ofstream &reportFile, ForestTree::FNodePtr node,
+                       int level) const;
+  // Helper function function for the generate Account Report
   void generateReportFile(ForestTree::FNodePtr accountNode) const;
 };
 

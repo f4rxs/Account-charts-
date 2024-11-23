@@ -1,10 +1,11 @@
 #include "ForestTree.h"
+#include <algorithm>
 #include <cstddef>
-#include <fstream>
-#include <string>
 #include <filesystem>
-#include <algorithm> 
-#include <sstream>   
+#include <fstream>
+#include <iomanip>
+#include <sstream>
+#include <string>
 
 // constructor to initialize the tree
 ForestTree::ForestTree() : root(nullptr) {}
@@ -248,112 +249,123 @@ void ForestTree::printTree(FNodePtr node, int level, string prefix) const {
   }
 }
 
-void ForestTree::saveNodeRecursive(ofstream &outFile, FNodePtr node, int level) const {
-    if (!node) return;
+void ForestTree::saveNodeRecursive(ofstream &outFile, FNodePtr node,
+                                   int level) const {
+  if (!node)
+    return;
 
-    outFile << string(level * 2, ' ') 
-            << node->data.getAccountNumber() << " \"" 
-            << node->data.getDescription() << "\" " 
-            << node->data.getBalance() << endl;
+  outFile << string(level * 2, ' ') << node->data.getAccountNumber() << " \""
+          << node->data.getDescription() << "\" " << node->data.getBalance()
+          << endl;
 
-    saveNodeRecursive(outFile, node->right, level + 1);
-    saveNodeRecursive(outFile, node->left, level);    
+  saveNodeRecursive(outFile, node->right, level + 1);
+  saveNodeRecursive(outFile, node->left, level);
 }
 
 void ForestTree::saveToFile(const string &fileName) const {
-    ofstream outFile(fileName);
-    if (!outFile.is_open()) {
-        cerr << "Error: Could not open file " << fileName << " for writing." << endl;
-        return;
-    }
+  ofstream outFile(fileName);
+  if (!outFile.is_open()) {
+    cerr << "Error: Could not open file " << fileName << " for writing."
+         << endl;
+    return;
+  }
 
-    try {
-        // Start saving from the root node
-        saveNodeRecursive(outFile, root, 0);
-        cout << "Tree saved successfully to file: " << fileName << endl;
-    } catch (const exception &e) {
-        cerr << "Error during save operation: " << e.what() << endl;
-    }
+  try {
+    // Start saving from the root node
+    saveNodeRecursive(outFile, root, 0);
+    cout << "Tree saved successfully to file: " << fileName << endl;
+  } catch (const exception &e) {
+    cerr << "Error during save operation: " << e.what() << endl;
+  }
 
-    outFile.close();
+  outFile.close();
 }
 
-
-void ForestTree:: generateReportFile(ForestTree::FNodePtr accountNode) const {
+void ForestTree::generateReportFile(ForestTree::FNodePtr accountNode) const {
   if (!accountNode) {
-        cerr << "Error: Account node is null. Cannot generate report." << endl;
-        return;
-    }
+    cerr << "Error: Account node is null. Cannot generate report." << endl;
+    return;
+  }
 
-    string truncatedDescription = accountNode->data.getDescription().substr(0, 10);
-    replace(truncatedDescription.begin(), truncatedDescription.end(), ' ', '_'); 
-    replace(truncatedDescription.begin(), truncatedDescription.end(), '/', '_'); 
+  string truncatedDescription =
+      accountNode->data.getDescription().substr(0, 10);
+  replace(truncatedDescription.begin(), truncatedDescription.end(), ' ', '_');
+  replace(truncatedDescription.begin(), truncatedDescription.end(), '/', '_');
 
-    // Generate the filename with account number and truncated descri   ption
-    string fileName = "accounts/account_" + to_string(accountNode->data.getAccountNumber()) + "_" + truncatedDescription + ".txt";
+  // Generate the filename with account number and truncated descri   ption
+  string fileName = "accounts/account_" +
+                    to_string(accountNode->data.getAccountNumber()) + "_" +
+                    truncatedDescription + ".txt";
 
-    // Open the file for writing
-    ofstream reportFile(fileName);
-    if (!reportFile.is_open()) {
-        cerr << "Error: Could not create file: " << fileName << endl;
-        return;
-    }
+  // Open the file for writing
+  ofstream reportFile(fileName);
+  if (!reportFile.is_open()) {
+    cerr << "Error: Could not create file: " << fileName << endl;
+    return;
+  }
 
-    // Write header with borders
-    reportFile << "==========================================" << endl;
-    reportFile << "               ACCOUNT REPORT              " << endl;
-    reportFile << "==========================================" << endl;
-    reportFile << "Account Number : " << accountNode->data.getAccountNumber() << endl;
-    reportFile << "Description    : " << accountNode->data.getDescription() << endl;
-    reportFile << "Balance        : $" << fixed << setprecision(2) << accountNode->data.getBalance() << endl;
-    reportFile << "==========================================" << endl;
+  // Write header with borders
+  reportFile << "==========================================" << endl;
+  reportFile << "               ACCOUNT REPORT              " << endl;
+  reportFile << "==========================================" << endl;
+  reportFile << "Account Number : " << accountNode->data.getAccountNumber()
+             << endl;
+  reportFile << "Description    : " << accountNode->data.getDescription()
+             << endl;
+  reportFile << "Balance        : $" << fixed << setprecision(2)
+             << accountNode->data.getBalance() << endl;
+  reportFile << "==========================================" << endl;
 
-    // Subaccounts and transactions section
-    if (accountNode->right) {
-        reportFile << "SUBACCOUNTS AND TRANSACTIONS" << endl;
-        reportFile << "------------------------------------------" << endl;
-        saveSubAccounts(reportFile, accountNode->right, 1); // Process subaccounts
-    } else {
-        reportFile << "No subaccounts available for this account.\n";
-    }
+  // Subaccounts and transactions section
+  if (accountNode->right) {
+    reportFile << "SUBACCOUNTS AND TRANSACTIONS" << endl;
+    reportFile << "------------------------------------------" << endl;
+    saveSubAccounts(reportFile, accountNode->right, 1); // Process subaccounts
+  } else {
+    reportFile << "No subaccounts available for this account.\n";
+  }
 
-    // Footer
-    reportFile << "==========================================" << endl;
-    reportFile << "        END OF ACCOUNT REPORT             " << endl;
-    reportFile << "==========================================" << endl;
+  // Footer
+  reportFile << "==========================================" << endl;
+  reportFile << "        END OF ACCOUNT REPORT             " << endl;
+  reportFile << "==========================================" << endl;
 
-    reportFile.close();
-    cout << "Report generated: " << fileName << endl;
+  reportFile.close();
+  cout << "Report generated: " << fileName << endl;
 }
 
+void ForestTree::saveSubAccounts(ofstream &reportFile,
+                                 ForestTree::FNodePtr node, int level) const {
+  if (!node)
+    return;
 
-void ForestTree:: saveSubAccounts(ofstream &reportFile, ForestTree::FNodePtr node, int level) const {
-if (!node) return;
+  // Indentation for hierarchical structure
+  string indentation(level * 4, ' ');
 
-    // Indentation for hierarchical structure
-    string indentation(level * 4, ' ');
+  // Write subaccount details
+  reportFile << indentation << "- Subaccount: " << node->data.getAccountNumber()
+             << endl;
+  reportFile << indentation
+             << "  Description : " << node->data.getDescription().substr(0, 10)
+             << endl;
+  reportFile << indentation << "  Balance     : $" << fixed << setprecision(2)
+             << node->data.getBalance() << endl;
+  reportFile << indentation << "  (Same breakdown as account "
+             << node->data.getAccountNumber() << ")" << endl;
 
-    // Write subaccount details
-    reportFile << indentation << "- Subaccount: " << node->data.getAccountNumber() << endl;
-    reportFile << indentation << "  Description : " << node->data.getDescription().substr(0, 10) << endl;
-    reportFile << indentation << "  Balance     : $" << fixed << setprecision(2) << node->data.getBalance() << endl;
-    reportFile << indentation << "  (Same breakdown as account " << node->data.getAccountNumber() << ")" << endl;
-
-    // Recursively handle children and siblings
-    saveSubAccounts(reportFile, node->right, level + 1); // Process children (next level)
-    saveSubAccounts(reportFile, node->left, level);      // Process siblings (same level)
+  // Recursively handle children and siblings
+  saveSubAccounts(reportFile, node->right,
+                  level + 1); // Process children (next level)
+  saveSubAccounts(reportFile, node->left,
+                  level); // Process siblings (same level)
 }
 
-void ForestTree::generateAccountReport(ForestTree &forestTree) const{
-     int accountNumber;
-    cout << "Enter the account number for which you want to generate a report: ";
-    cin >> accountNumber;
+void ForestTree::generateAccountReport(int accountNumber) const {
 
-    ForestTree::FNodePtr accountNode = forestTree.findAccount(accountNumber);
-    if (!accountNode) {
-        cout << "Error: Account not found!" << endl;
-        return;
-    }
+  FNodePtr accountNode = findNode(root, accountNumber);
+  if (!accountNode) {
+    return;
+  }
 
-     generateReportFile(accountNode);
+  generateReportFile(accountNode);
 }
