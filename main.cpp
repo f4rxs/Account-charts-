@@ -10,19 +10,25 @@ using namespace std;
 void readAccountsFromFile(const string &fileName, ForestTree &forestTree);
 int main()
 {
-ForestTree forestTree;
+    ForestTree forestTree;
 
-  
-    string fileName = "resources/accounts.txt";   
+    string fileName = "resources/accounts.txt";
+    string fileNameToSaved = "resources/savedAccounts.txt";
+    readAccountsFromFile(fileName, forestTree);
+
+    forestTree.printTree();
+
+    forestTree.saveToFile(fileNameToSaved);
+
+        forestTree = ForestTree();
+    cout<<"Reading from the saved file"<<endl;
+    readAccountsFromFile(fileNameToSaved,forestTree);
+
+   forestTree.generateAccountReport(forestTree);
 
 
-   readAccountsFromFile(fileName, forestTree);
 
-forestTree.printTree();
-
-
-
-    ForestTree tree;
+    // ForestTree tree;
 
     // // Insert accounts to build a sample tree
     // tree.insert(Account(1,"Super Account",1000));
@@ -37,19 +43,16 @@ forestTree.printTree();
     // ForestTree::FNodePtr parent = tree.findParent(tree.getRoot(), accountNumberToFind, 3);
 
     // if (parent != nullptr) {
-    //     std::cout << "Parent found: " << std::endl;
-    //     std::cout << "Account Number: " << parent->data.getAccountNumber() << std::endl;
-    //     std::cout << "Description: " << parent->data.getDescription() << std::endl;
-    //     std::cout << "Balance: " << parent->data.getBalance() << std::endl;
+    //     cout << "Parent found: " << endl;
+    //     cout << "Account Number: " << parent->data.getAccountNumber() << endl;
+    //     cout << "Description: " << parent->data.getDescription() << endl;
+    //     cout << "Balance: " << parent->data.getBalance() << endl;
     // } else {
-    //     std::cout << "No parent found for account number " << accountNumberToFind << std::endl;
+    //     cout << "No parent found for account number " << accountNumberToFind << endl;
     // }
-
 
     // tree.printTree();
 
-
-  
     return 0;
 }
 
@@ -59,24 +62,28 @@ void readAccountsFromFile(const string &fileName, ForestTree &forestTree)
     cout << "Attempting to open file: DS-Lebanese-Accounts/accounts.txt" << endl;
     // Open the file
     ifstream file(filePath);
-    if (!file.is_open()) {
+    if (!file.is_open())
+    {
         cerr << "Error: Could not open file " << filePath << endl;
         return;
     }
 
     string line;
-    while (getline(file, line)) {
-        if (line.empty() || line[0] == '#') continue; // Ignore empty lines or comments
+    while (getline(file, line))
+    {
+        if (line.empty() || line[0] == '#')
+            continue; // Ignore empty lines or comments
 
         stringstream ss(line);
         int accountNumber;
         string description;
         double balance;
 
-        if (ss >> accountNumber) {
-            getline(ss, description, '"');  
-            getline(ss, description, '"');  
-            ss >> balance;  
+        if (ss >> accountNumber)
+        {
+            getline(ss, description, '"');
+            getline(ss, description, '"');
+            ss >> balance;
 
             Account account(accountNumber, description, balance);
 
@@ -87,4 +94,3 @@ void readAccountsFromFile(const string &fileName, ForestTree &forestTree)
     file.close();
     cout << "Accounts loaded successfully from file." << endl;
 }
-

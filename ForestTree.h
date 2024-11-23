@@ -6,10 +6,12 @@
 
 using namespace std;
 
-class ForestTree {
+class ForestTree
+{
 private:
   // Inner class for a node in the tree
-  class ForestNode {
+  class ForestNode
+  {
   public:
     Account data;      // Node data
     ForestNode *left;  // Sibling (same level)
@@ -20,11 +22,10 @@ private:
         : data(data), left(nullptr), right(nullptr) {}
   };
   typedef ForestNode *FNodePtr; // Pointer to a node
-  FNodePtr root;   
-
+  FNodePtr root;
 
 public:
-             // Root of the tree
+  // Root of the tree
 
   // Constructor
   ForestTree();
@@ -43,11 +44,9 @@ public:
   FNodePtr deleteAccount(int accountNumber);
   // function to print the tree
   void printTree() const;
-
-  FNodePtr findParent(FNodePtr current, int accountNumber, int level) const;
-
-
-
+  // finction to save into a file
+  void saveToFile(const string &fileName) const;
+ void generateAccountReport(ForestTree &forestTree) const;
 private:
   // Helper function to delete from a specific node
   void destroy(FNodePtr node);
@@ -56,11 +55,18 @@ private:
   // Helper function to check if an account is a child (subAccount) of another
   // account
   bool isChild(int accountNumber, int subAccountNumber) const;
-  // Helper function to find the parent node of a given account
   // Helper function to find a node with a given account number
   FNodePtr findNode(FNodePtr current, int accountNumber) const;
   // Helper function to print the tree
   void printTree(FNodePtr node, int level, string prefix) const;
+  //Helper function to find the parent node
+  FNodePtr findParent(FNodePtr current, int accountNumber, int level) const;
+  //Helper function to save the nodes to genrate accounts
+  void saveNodeRecursive(ofstream &outFile, FNodePtr node, int level) const;
+  //Helper function to save subaccounts to genrate accounts
+  void saveSubAccounts(ofstream &reportFile, ForestTree::FNodePtr node, int level) const;
+  //Helper function function for the generate Account Report
+  void generateReportFile(ForestTree::FNodePtr accountNode) const;
 };
 
-#endif // end of FORESTTREE_H
+#endif
