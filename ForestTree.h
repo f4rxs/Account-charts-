@@ -19,11 +19,13 @@ private:
     ForestNode(const Account &data)
         : data(data), left(nullptr), right(nullptr) {}
   };
-
   typedef ForestNode *FNodePtr; // Pointer to a node
-  FNodePtr root;                // Root of the tree
+  FNodePtr root;   
+
 
 public:
+             // Root of the tree
+
   // Constructor
   ForestTree();
   // Destructor
@@ -42,6 +44,10 @@ public:
   // function to print the tree
   void printTree() const;
 
+  FNodePtr findParent(FNodePtr current, int accountNumber, int level) const;
+
+
+
 private:
   // Helper function to delete from a specific node
   void destroy(FNodePtr node);
@@ -51,7 +57,6 @@ private:
   // account
   bool isChild(int accountNumber, int subAccountNumber) const;
   // Helper function to find the parent node of a given account
-  FNodePtr findParent(FNodePtr current, int accountNumber, int level) const;
   // Helper function to find a node with a given account number
   FNodePtr findNode(FNodePtr current, int accountNumber) const;
   // Helper function to print the tree

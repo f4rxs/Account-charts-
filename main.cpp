@@ -21,36 +21,35 @@ ForestTree forestTree;
 forestTree.printTree();
 
 
-    // // Create a few transactions
-    // Transaction t1(1, "Deposit", 200.0, 'C');
-    // Transaction t2(2, "Withdrawal", 150.0, 'D');
-    // Transaction t3(3, "Deposit", 50.0, 'C');
 
-    // // Create an account and set it up
-    // Account account(1, "Main Account", 1000.0);
+    ForestTree tree;
 
-    // // Add transactions to the account by using their pointers
-    // account.addTransaction(&t1); // Store pointer to Transaction
-    // account.addTransaction(&t2); // Store pointer to Transaction
-    // account.addTransaction(&t3); // Store pointer to Transaction
+    // // Insert accounts to build a sample tree
+    // tree.insert(Account(1,"Super Account",1000));
+    // tree.insert(Account(101, "ParentAccount", 5000.0));
+    // tree.insert(Account(1011, "ChildAccount1", 3000.0));
+    // tree.insert(Account(1012, "ChildAccount2", 2000.0));
+    // tree.insert(Account(10111, "GrandChildAccount", 1000.0));
+    // tree.insert(Account(102, "SiblingAccount", 4000.0));
 
-    // // Create subaccounts and add them to the main account
-    // Account subAccount1(11, "Subaccount 1", 500.0);
-    // Account subAccount2(12, "Subaccount 2", 200.0);
+    // // Test the findParent function
+    // int accountNumberToFind = 102; // Replace with an account number to test
+    // ForestTree::FNodePtr parent = tree.findParent(tree.getRoot(), accountNumberToFind, 3);
 
-    // // Output account details
-    // cout << "Account Details: " << endl;
-    // cout << account << endl;
+    // if (parent != nullptr) {
+    //     std::cout << "Parent found: " << std::endl;
+    //     std::cout << "Account Number: " << parent->data.getAccountNumber() << std::endl;
+    //     std::cout << "Description: " << parent->data.getDescription() << std::endl;
+    //     std::cout << "Balance: " << parent->data.getBalance() << std::endl;
+    // } else {
+    //     std::cout << "No parent found for account number " << accountNumberToFind << std::endl;
+    // }
 
-    // cout << endl;
 
-    // // Test input and output using overloaded operators
-    // Account inputAccount;
-    // cout << "Enter account details (Account Number, Description, Balance): ";
-    // cin >> inputAccount;
-    // cout << "You entered: " << endl;
-    // cout << inputAccount << endl;
+    // tree.printTree();
 
+
+  
     return 0;
 }
 
