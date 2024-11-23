@@ -65,24 +65,21 @@ bool ForestTree::insert(FNodePtr& current, const Account& account) {
 
     // Check if the current node is the parent of the account
     if (isChild(current->data, account)) {
+        // check if the 1st child is bigger than the account
+        if (current->left != nullptr && current->left->data.getAccountNumber() > account.getAccountNumber()) {
+            // insert the account as the child of the current node
+            FNodePtr temp = current->left; // Save the child of the current node
+            current->left = new ForestNode(account); // Insert the account node
+            current->left->right = temp; // link the child to the new node created as a sibling
+            return true;
+        }
         // Recur to the next level (left child)
         return insert(current->left, account);
     } else {
-        FNodePtr temp = nullptr;
-        // this here is making an error in the tree structure, needs to be fixed
-        // // check if the 1st child is bigger than the account
-        // if (current->left != nullptr && current->left->data.getAccountNumber() > account.getAccountNumber()) {
-        //     // insert the account as the child of the current node
-        //     temp = current->left; // Save the child of the current node
-        //     current->left = new ForestNode(account); // Insert the account node
-        //     current->left->right = temp; // link the child to the new node created as a sibling
-        //     return true;
-        // }
-
         // check if next sibling is bigger than the account
         if (current->right != nullptr && current->right->data.getAccountNumber() > account.getAccountNumber()) {
             // insert the account as the sibling of the current node
-            temp = current->right; // Save the sibling of the current node
+            FNodePtr temp = current->right; // Save the sibling of the current node
             current->right = new ForestNode(account); // Insert the account node
             current->right->right = temp; // link the sibling to the new node created
             return true;
