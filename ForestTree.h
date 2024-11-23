@@ -51,7 +51,7 @@ private:
   // account
   bool isChild(int accountNumber, int subAccountNumber) const;
   // Helper function to find the parent node of a given account
-  FNodePtr findParent(FNodePtr current, int accountNumber) const;
+  FNodePtr findParent(FNodePtr current, int accountNumber, int level) const;
   // Helper function to find a node with a given account number
   FNodePtr findNode(FNodePtr current, int accountNumber) const;
   // Helper function to print the tree

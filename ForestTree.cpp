@@ -49,7 +49,7 @@ bool ForestTree::insert(const Account &account) {
 
   // if the account is not on the 1st level
   // find the parent of the account
-  FNodePtr parent = findParent(root, account.getAccountNumber());
+  FNodePtr parent = findParent(root, account.getAccountNumber(), 1);
   if (parent == nullptr) {
     cout << "\nParent account not found for account: "
          << account.getAccountNumber()
@@ -110,8 +110,8 @@ bool ForestTree::insert(FNodePtr &current, const Account &account) {
 }
 
 // Helper function to find the parent node of a given account
-ForestTree::FNodePtr ForestTree::findParent(FNodePtr current,
-                                            int accountNumber) const {
+ForestTree::FNodePtr ForestTree::findParent(FNodePtr current, int accountNumber,
+                                            int level) const {
   // Base case
   if (current == nullptr) {
     return nullptr; // No parent found in this branch
@@ -122,14 +122,29 @@ ForestTree::FNodePtr ForestTree::findParent(FNodePtr current,
     return current;
   }
 
-  // Recursively search in the children (next level)
-  FNodePtr parentInRight = findParent(current->right, accountNumber);
-  if (parentInRight != nullptr) {
-    return parentInRight; // Parent found in the right subtree
+  // check if we should stay on same level or move to the next level
+
+  //  convert the account number to string
+  string accountStr = to_string(accountNumber);
+  // get the length of the account number
+  int accountLength = accountStr.length();
+
+  // check if the account number is on the same level
+  cout << "Account Length: " << accountLength << endl;
+  cout << "Level: " << level << endl;
+  if (accountLength == level) {
+    // Recursively search in the children (next level)
+    cout << "Checking right child" << endl;
+    FNodePtr parentInRight =
+        findParent(current->right, accountNumber, level + 1);
+    if (parentInRight != nullptr) {
+      return parentInRight; // Parent found in the right subtree
+    }
   }
 
+  cout << "Checking left sibling" << endl;
   // If not found in the right, check the left sibling (same level)
-  return findParent(current->left, accountNumber);
+  return findParent(current->left, accountNumber, level);
 }
 
 // function to find an account in the tree
