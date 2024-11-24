@@ -66,7 +66,7 @@ bool ForestTree::insert(const Account &account) {
   // find the parent of the account
   FNodePtr parent = findParent(root, account.getAccountNumber(), 1);
   if (parent == nullptr) {
-    cout << "\nParent account not found for account: "
+    cerr << "\nParent account not found for account: "
          << account.getAccountNumber()
          << "\nParent account: " << account.getAccountNumber() / 10
          << " should exist first before inserting this account."
@@ -88,7 +88,7 @@ bool ForestTree::insert(FNodePtr &current, const Account &account) {
   // check if it is the same account (either same id or same description)
   if (current->data.getAccountNumber() == account.getAccountNumber() ||
       current->data.getDescription() == account.getDescription()) {
-    cout << "\nAccount already exists. id and description should be unique!"
+    cerr << "\nAccount already exists. id and description should be unique!"
          << endl;
     return false;
   }
@@ -213,18 +213,19 @@ ForestTree::FNodePtr ForestTree::findNode(FNodePtr current,
 // }
 
 bool ForestTree::deleteAccount(int accountNumber) {
-    // Check if the account is at the root
-    if (root != nullptr && root->data.getAccountNumber() == accountNumber) {
-        destroy(root);
-        root = nullptr;
-        return true;
-    }
+  // Check if the account is at the root
+  if (root != nullptr && root->data.getAccountNumber() == accountNumber) {
+    destroy(root);
+    root = nullptr;
+    return true;
+  }
 
-    // Call the recursive delete function to search and delete the account in all subtrees
-    root = findNodeAndDelete(root, accountNumber);
+  // Call the recursive delete function to search and delete the account in all
+  // subtrees
+  root = findNodeAndDelete(root, accountNumber);
 
-    // If root is still the same, account was not found or deleted
-    return root != nullptr;
+  // If root is still the same, account was not found or deleted
+  return root != nullptr;
 }
 
 // Public function to print the tree
@@ -379,29 +380,30 @@ void ForestTree::generateAccountReport(int accountNumber) const {
 
   FNodePtr accountNode = findNode(root, accountNumber);
   if (!accountNode) {
+    cerr << "Error: Account not found. Cannot generate report." << endl;
     return;
   }
 
   generateReportFile(accountNode);
 }
 
+ForestTree::FNodePtr ForestTree::findNodeAndDelete(FNodePtr node,
+                                                   int accountNumber) {
+  // Base case: if the node is null, return null
+  if (node == nullptr) {
+    return nullptr;
+  }
 
-ForestTree::FNodePtr ForestTree::findNodeAndDelete(FNodePtr node, int accountNumber) {
-    // Base case: if the node is null, return null
-    if (node == nullptr) {
-        return nullptr;
-    }
+  // If the current node's account matches, delete it
+  if (node->data.getAccountNumber() == accountNumber) {
+    destroy(node);  // delete the current node and its children
+    return nullptr; // return null to indicate this node is deleted
+  }
 
-    // If the current node's account matches, delete it
-    if (node->data.getAccountNumber() == accountNumber) {
-        destroy(node);  // delete the current node and its children
-        return nullptr;  // return null to indicate this node is deleted
-    }
+  // Recursively search in the left and right subtrees
+  node->left = findNodeAndDelete(node->left, accountNumber);
+  node->right = findNodeAndDelete(node->right, accountNumber);
 
-    // Recursively search in the left and right subtrees
-    node->left = findNodeAndDelete(node->left, accountNumber);
-    node->right = findNodeAndDelete(node->right, accountNumber);
-    
-    // Return the potentially updated node (after recursion)
-    return node;
+  // Return the potentially updated node (after recursion)
+  return node;
 }

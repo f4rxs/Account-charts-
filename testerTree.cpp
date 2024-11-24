@@ -68,5 +68,7 @@ int main() {
   tree.deleteAccount(12);
   cout << "Tree Structure after deleting account with id 12:" << endl;
   tree.printTree();
+
+  tree.generateAccountReport(1);
   return 0;
 }

@@ -1,0 +1,28 @@
+==========================================
+               ACCOUNT REPORT              
+==========================================
+Account Number : 1
+Description    : Root Account
+Balance        : $100.00
+==========================================
+SUBACCOUNTS AND TRANSACTIONS
+------------------------------------------
+    - Subaccount: 11
+      Description : Child #2 o
+      Balance     : $50.00
+      (Same breakdown as account 11)
+        - Subaccount: 111
+          Description : Child #1 o
+          Balance     : $25.00
+          (Same breakdown as account 111)
+            - Subaccount: 1111
+              Description : Child #1 o
+              Balance     : $20.00
+              (Same breakdown as account 1111)
+        - Subaccount: 112
+          Description : Child #2 o
+          Balance     : $40.00
+          (Same breakdown as account 112)
+==========================================
+        END OF ACCOUNT REPORT             
+==========================================
