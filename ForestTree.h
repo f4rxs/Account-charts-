@@ -6,10 +6,12 @@
 
 using namespace std;
 
-class ForestTree {
+class ForestTree
+{
 private:
   // Inner class for a node in the tree
-  class ForestNode {
+  class ForestNode
+  {
   public:
     Account data;      // Node data
     ForestNode *left;  // Sibling (same level)
@@ -38,6 +40,8 @@ public:
   bool insert(const Account &account);
   // function to find an account in the tree
   Account *findAccount(int accountNumber) const;
+  //function to apply transactions
+  bool applyTransaction(int accountNumber, Transaction *transaction);
   // function to delete an account from the tree
   bool deleteAccount(int accountNumber);
   // function to print the tree
@@ -45,6 +49,8 @@ public:
   // finction to save into a file
   void saveToFile(const string &fileName) const;
   void generateAccountReport(int accountNumber) const;
+
+   void updateParentBalances(FNodePtr node);
 
 private:
   // Helper function to delete from a specific node
@@ -73,7 +79,7 @@ private:
   // Helper function function for the generate Account Report
   void generateReportFile(ForestTree::FNodePtr accountNode) const;
 
-
+ void  updateNodeBalance(FNodePtr current, int accountNumber, int delta);
 };
 
 #endif

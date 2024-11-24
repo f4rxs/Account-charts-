@@ -1,15 +1,18 @@
 #include "Transaction.h"
 
-Transaction::Transaction() : transactionId(0), account(""), amount(0.0), type('D') {}
+int Transaction::nextTransactionId = 1;
 
-Transaction::Transaction(int transactionId, const string &subaccount, double amount, char type)
+Transaction::Transaction() : transactionId(nextTransactionId++), amount(0.0), type('C') {}
+
+Transaction::Transaction(const double &amount, const char &type)
+    : transactionId(nextTransactionId++), amount(amount)
 {
-    setTransaction(transactionId, subaccount, amount, type);
+    setTransactionType(type);
 }
 
 // Getters
 int Transaction::getTransactionId() const { return transactionId; }
-string Transaction::getTransactionAccount() const { return account; }
+// string Transaction::getTransactionAccount() const { return account; }
 double Transaction::getTransactionAmount() const { return amount; }
 char Transaction::getTransactionType() const { return type; }
 
@@ -19,10 +22,10 @@ void Transaction::setTransactionId(int transactionId)
     this->transactionId = transactionId;
 }
 
-void Transaction::setTransactionAccount(const string &subaccount)
-{
-    this->account = subaccount;
-}
+// void Transaction::setTransactionAccount(const string &subaccount)
+// {
+//     this->account = subaccount;
+// }
 
 void Transaction::setTransactionAmount(double amount)
 {
@@ -45,7 +48,7 @@ void Transaction::setTransactionType(char type)
 void Transaction::setTransaction(int transactionId, const string &subaccount, double amount, char type)
 {
     setTransactionId(transactionId);
-    setTransactionAccount(subaccount);
+    // setTransactionAccount(subaccount);
     setTransactionAmount(amount);
     setTransactionType(type);
 }
@@ -69,7 +72,7 @@ bool Transaction::operator<(const Transaction &other) const
 ostream &operator<<(ostream &os, const Transaction &transaction)
 {
     os << "Transaction ID: " << transaction.transactionId
-       << ", Account: " << transaction.account
+       //    << ", Account: " << transaction.account
        << ", Amount: " << transaction.amount
        << ", Type: " << (transaction.type == 'D' ? "Debit" : "Credit");
     return os;
@@ -80,8 +83,8 @@ istream &operator>>(istream &is, Transaction &transaction)
     cout << "Enter Transaction ID: ";
     is >> transaction.transactionId;
 
-    cout << "Enter account: ";
-    is >> transaction.account;
+    // cout << "Enter account: ";
+    // is >> transaction.account;
 
     cout << "Enter Amount: ";
     is >> transaction.amount;

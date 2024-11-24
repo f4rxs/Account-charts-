@@ -45,7 +45,15 @@ void Account::setBalance(double balance)
 
 void Account::addTransaction(Transaction *transaction)
 {
-    transactions.push_back(transaction); // Adds the transaction pointer to the vector
+    transactions.push_back(transaction);
+    if (transaction->getTransactionType() == 'C' || transaction->getTransactionType() == 'c')
+    {
+        this->balance -= transaction->getTransactionAmount();
+    }
+    else if (transaction->getTransactionType() == 'D' || transaction->getTransactionType() == 'd')
+    {
+        this->balance += transaction->getTransactionAmount();
+    }
 }
 
 bool Account::operator==(const Account &other) const
@@ -64,9 +72,7 @@ bool Account::operator<(const Account &other) const
     return this->accountNumber < other.accountNumber;
 }
 
-// Method to check if an account is a child of another
 
-// Overloaded Operators
 ostream &operator<<(ostream &os, const Account &account)
 {
     os << "Account Number: " << account.accountNumber

@@ -13,53 +13,20 @@ int main()
     ForestTree forestTree;
 
     string fileName = "resources/accounts.txt";
-    string fileNameToSaved = "resources/savedAccounts.txt";
+    // string fileNameToSaved = "resources/savedAccounts.txt";
     readAccountsFromFile(fileName, forestTree);
-    forestTree.deleteAccount(80265);
-    // forestTree.printTree();
-    // forestTree.deleteAccount(1);
+     forestTree.applyTransaction(68725,(new Transaction(500,'D')));
+    forestTree.generateAccountReport(68);
     forestTree.printTree();
 
-    // forestTree.saveToFile(fileNameToSaved);
-
-    //     forestTree = ForestTree();
-    // cout<<"Reading from the saved file"<<endl;
-    // readAccountsFromFile(fileNameToSaved,forestTree);
-
-
-// int accountNumber;
-// cout<<"Enter an account number to generate a report";
-// cin>>accountNumber;
-
-
-//    forestTree.generateAccountReport(accountNumber);
 
 
 
-    // ForestTree tree;
+  
 
-    // // Insert accounts to build a sample tree
-    // tree.insert(Account(1,"Super Account",1000));
-    // tree.insert(Account(101, "ParentAccount", 5000.0));
-    // tree.insert(Account(1011, "ChildAccount1", 3000.0));
-    // tree.insert(Account(1012, "ChildAccount2", 2000.0));
-    // tree.insert(Account(10111, "GrandChildAccount", 1000.0));
-    // tree.insert(Account(102, "SiblingAccount", 4000.0));
+  
 
-    // // Test the findParent function
-    // int accountNumberToFind = 102; // Replace with an account number to test
-    // ForestTree::FNodePtr parent = tree.findParent(tree.getRoot(), accountNumberToFind, 3);
-
-    // if (parent != nullptr) {
-    //     cout << "Parent found: " << endl;
-    //     cout << "Account Number: " << parent->data.getAccountNumber() << endl;
-    //     cout << "Description: " << parent->data.getDescription() << endl;
-    //     cout << "Balance: " << parent->data.getBalance() << endl;
-    // } else {
-    //     cout << "No parent found for account number " << accountNumberToFind << endl;
-    // }
-
-    // tree.printTree();
+  
 
     return 0;
 }

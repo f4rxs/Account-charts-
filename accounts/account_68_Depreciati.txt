@@ -1,0 +1,123 @@
+==========================================
+               ACCOUNT REPORT              
+==========================================
+Account Number : 68
+Description    : Depreciation, amortization, impairment and provisions
+Balance        : $500.00
+==========================================
+SUBACCOUNTS
+------------------------------------------
+    - Subaccount: 681
+      Description : Depreciati
+      Balance     : $0.00
+    
+        - Subaccount: 6811
+          Description :  Depreciat
+          Balance     : $0.00
+        
+            - Subaccount: 68111
+              Description :  Intangibl
+              Balance     : $0.00
+            
+            - Subaccount: 68112
+              Description :  Tangible 
+              Balance     : $0.00
+            
+        - Subaccount: 6812
+          Description :  Amortizat
+          Balance     : $0.00
+        
+        - Subaccount: 6815
+          Description :  Increase 
+          Balance     : $0.00
+        
+        - Subaccount: 6816
+          Description :  Impairmen
+          Balance     : $0.00
+        
+            - Subaccount: 68161
+              Description :  Intangibl
+              Balance     : $0.00
+            
+            - Subaccount: 68162
+              Description :  Tangible 
+              Balance     : $0.00
+            
+        - Subaccount: 6817
+          Description :  Impairmen
+          Balance     : $0.00
+        
+            - Subaccount: 68173
+              Description :  Inventory
+              Balance     : $0.00
+            
+            - Subaccount: 68174
+              Description :  Receivabl
+              Balance     : $0.00
+            
+    - Subaccount: 686
+      Description : Amortizati
+      Balance     : $0.00
+    
+        - Subaccount: 6861
+          Description :  Amortizat
+          Balance     : $0.00
+        
+        - Subaccount: 6865
+          Description :  Increase 
+          Balance     : $0.00
+        
+        - Subaccount: 6866
+          Description :  Impairmen
+          Balance     : $0.00
+        
+            - Subaccount: 68662
+              Description :  Financial
+              Balance     : $0.00
+            
+            - Subaccount: 68665
+              Description :  Marketabl
+              Balance     : $0.00
+            
+        - Subaccount: 6868
+          Description :  Other exp
+          Balance     : $0.00
+        
+    - Subaccount: 687
+      Description : Depreciati
+      Balance     : $500.00
+    
+        - Subaccount: 6871
+          Description :  Exception
+          Balance     : $0.00
+        
+        - Subaccount: 6872
+          Description :  Increase 
+          Balance     : $500.00
+        
+            - Subaccount: 68725
+              Description :  Derogator
+              Balance     : $500.00
+            
+        - Subaccount: 6873
+          Description :  Increase 
+          Balance     : $0.00
+        
+        - Subaccount: 6874
+          Description :  Increase 
+          Balance     : $0.00
+        
+        - Subaccount: 6875
+          Description :  Increase 
+          Balance     : $0.00
+        
+        - Subaccount: 6876
+          Description :  Exception
+          Balance     : $0.00
+        
+TRANSACTIONS
+------------------------------------------
+No transactions available for this account.
+==========================================
+        END OF ACCOUNT REPORT             
+==========================================
