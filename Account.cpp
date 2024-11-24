@@ -1,12 +1,10 @@
 #include "Account.h"
 
-// Constructors
 Account::Account() : accountNumber(0), description(""), balance(0.0) {}
 
 Account::Account(int accountNumber, const string &description, double balance)
     : accountNumber(accountNumber), description(description), balance(balance) {}
 
-// Getter Methods
 int Account::getAccountNumber() const
 {
     return accountNumber;
@@ -22,12 +20,12 @@ double Account::getBalance() const
     return balance;
 }
 
-const vector<Transaction *> &Account::getTransactions() const
+// Return a non-const reference so we can modify the transactions vector
+vector<Transaction *> &Account::getTransactions()
 {
     return transactions;
 }
 
-// Setter Methods
 void Account::setAccountNumber(int accountNumber)
 {
     this->accountNumber = accountNumber;
@@ -56,6 +54,32 @@ void Account::addTransaction(Transaction *transaction)
     }
 }
 
+void Account::removeTransaction(const int &transactionId)
+{
+    auto &transactions = getTransactions(); // Get the transactions (non-const reference)
+
+    for (auto it = transactions.begin(); it != transactions.end(); ++it)
+    {
+        if ((*it)->getTransactionId() == transactionId)
+        {
+            if ((*it)->getTransactionType() == 'D' || (*it)->getTransactionType() == 'd')
+            {
+                balance -= (*it)->getTransactionAmount(); // Revert debit
+            }
+            else if ((*it)->getTransactionType() == 'C' || (*it)->getTransactionType() == 'c')
+            {
+                balance += (*it)->getTransactionAmount(); // Revert credit
+            }
+
+            transactions.erase(it);
+            std::cout << "Transaction with ID " << transactionId << " has been removed." << std::endl;
+            return;
+        }
+    }
+
+    std::cout << "Transaction with ID " << transactionId << " not found." << std::endl;
+}
+
 bool Account::operator==(const Account &other) const
 {
     return (this->accountNumber == other.accountNumber ||
@@ -71,7 +95,6 @@ bool Account::operator<(const Account &other) const
 {
     return this->accountNumber < other.accountNumber;
 }
-
 
 ostream &operator<<(ostream &os, const Account &account)
 {

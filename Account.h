@@ -4,7 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include "Transaction.h" // Include the Transaction class
+#include "Transaction.h"
 
 using namespace std;
 
@@ -19,13 +19,14 @@ public:
     int getAccountNumber() const;
     string getDescription() const;
     double getBalance() const;
-    const vector<Transaction*>& getTransactions() const;  // Returns the vector of transaction pointers
+     vector<Transaction*>& getTransactions(); 
 
     // Setter Methods
     void setAccountNumber(int accountNumber);
     void setDescription(const string &description);
     void setBalance(double balance);
-    void addTransaction(Transaction* transaction);  // Adds a transaction pointer
+    void addTransaction(Transaction* transaction);  
+    void removeTransaction(const int &transactionId);
 
 
     // Overloaded Operators

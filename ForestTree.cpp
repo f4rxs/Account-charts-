@@ -7,13 +7,10 @@
 #include <sstream>
 #include <string>
 
-// constructor to initialize the tree
 ForestTree::ForestTree() : root(nullptr) {}
 
-// destructor to delete the tree
 ForestTree::~ForestTree() { destroy(root); }
 
-// helper function to destroy and delete from a specific node
 void ForestTree::destroy(FNodePtr &node)
 {
   if (node != nullptr)
@@ -25,13 +22,10 @@ void ForestTree::destroy(FNodePtr &node)
   }
 }
 
-// function to get the root of the tree
 Account *ForestTree::getRoot() const { return &(root->data); }
 
-// check if the tree is empty
 bool ForestTree::isEmpty() const { return root == nullptr; }
 
-// function to check if an account is an ancestor of another account
 bool ForestTree::isAncestor(int ancestorNumber, int accountNumber) const
 {
   accountNumber /= 10;
@@ -48,7 +42,6 @@ bool ForestTree::isAncestor(int ancestorNumber, int accountNumber) const
   return false; // Not an ancestor
 }
 
-// function to check if an account is a child of another account
 bool ForestTree::isChild(int accountNumber, int subAccountNumber) const
 {
   string parentString = to_string(accountNumber);
@@ -57,7 +50,6 @@ bool ForestTree::isChild(int accountNumber, int subAccountNumber) const
          subAccountString.length() == parentString.length() + 1;
 }
 
-// function to insert an account (node) in the tree
 bool ForestTree::insert(const Account &account)
 {
   if (isEmpty())
@@ -65,14 +57,19 @@ bool ForestTree::insert(const Account &account)
     root = new ForestNode(account);
     return true;
   }
-  // check if the account is on the 1st level so technically no parent
+
+  // Check if the account is on the 1st level (no parent exists for level 1)
   if (account.getAccountNumber() < 10)
   {
-    return insert(root, account);
+    if (insert(root, account))
+    {
+      updateParentBalances(account.getAccountNumber());
+      return true;
+    }
+    return false;
   }
 
-  // if the account is not on the 1st level
-  // find the parent of the account
+  // Find the parent of the account
   FNodePtr parent = findParent(root, account.getAccountNumber(), 1);
   if (parent == nullptr)
   {
@@ -84,10 +81,17 @@ bool ForestTree::insert(const Account &account)
          << endl;
     return false;
   }
-  return insert(parent, account);
+
+  // Insert under the found parent
+  if (insert(parent, account))
+  {
+    updateParentBalances(account.getAccountNumber());
+    return true;
+  }
+  return false;
 }
 
-// helper function to insert an account in the tree
+// function to get the root of the tree
 bool ForestTree::insert(FNodePtr &current, const Account &account)
 {
   // If the current node is nullptr, insert here
@@ -141,7 +145,6 @@ bool ForestTree::insert(FNodePtr &current, const Account &account)
   }
 }
 
-// Helper function to find the parent node of a given account
 ForestTree::FNodePtr ForestTree::findParent(FNodePtr current, int accountNumber,
                                             int level) const
 {
@@ -167,7 +170,6 @@ ForestTree::FNodePtr ForestTree::findParent(FNodePtr current, int accountNumber,
   return findParent(current->left, accountNumber, level);
 }
 
-// function to find an account in the tree
 Account *ForestTree::findAccount(int accountNumber) const
 {
   FNodePtr node = findNode(root, accountNumber);
@@ -178,7 +180,6 @@ Account *ForestTree::findAccount(int accountNumber) const
   return nullptr; // Account not found
 }
 
-// Helper function to find a node with a given account number
 ForestTree::FNodePtr ForestTree::findNode(FNodePtr current,
                                           int accountNumber) const
 {
@@ -226,30 +227,65 @@ bool ForestTree::applyTransaction(int accountNumber, Transaction *transaction)
   accountNode->data.addTransaction(transaction); // Dereference pointer to pass the object
 
   // After applying the transaction, update parent balances
-  updateParentBalances(accountNode); // Update parent balances recursively
+  updateParentBalances(accountNumber); // Update parent balances recursively
 
   return true;
 }
 
-bool ForestTree::deleteAccount(int accountNumber)
+void ForestTree::removeTransaction(const int &accountNumber, const int &transactionId)
 {
-  // Check if the account is at the root
-  if (root != nullptr && root->data.getAccountNumber() == accountNumber)
-  {
-    destroy(root);
-    root = nullptr;
-    return true;
-  }
+    // Find the account
+    Account *account = findAccount(accountNumber);
+    
+    if (account)
+    {
+        // Remove the transaction from the account
+        account->removeTransaction(transactionId);
+        cout << "Transaction with ID " << transactionId << " removed from the account " << accountNumber << endl;
 
-  // Call the recursive delete function to search and delete the account in all
-  // subtrees
-  root = findNodeAndDelete(root, accountNumber);
+       
 
-  // If root is still the same, account was not found or deleted
-  return root != nullptr;
+        // Now update the parent balances
+        cout << "Updating parent balances after transaction removal." << endl;
+        updateParentBalances(accountNumber); // Pass the account node itself for parent updates
+    }
+    else
+    {
+        cout << "Account with the number " << accountNumber << " is not found" << endl;
+    }
 }
 
-// Public function to print the tree
+bool ForestTree::deleteAccount(int accountNumber)
+{
+    std::cout << "Attempting to delete account: " << accountNumber << std::endl;
+
+    FNodePtr nodeToDelete = nullptr;
+
+    // Check if the account is at the root
+    if (root != nullptr && root->data.getAccountNumber() == accountNumber)
+    {
+        std::cout << "Account is the root. Deleting root account " << accountNumber << std::endl;
+        destroy(root);  // Delete the root node
+        root = nullptr;  // Set root to nullptr
+        return true;     // Root account deleted successfully
+    }
+
+    // Call the recursive delete function to search and delete the account in all subtrees
+    std::cout << "Searching and deleting account " << accountNumber << " in the tree." << std::endl;
+    nodeToDelete = findNode(root, accountNumber);
+
+    if (nodeToDelete != nullptr) {
+        // Perform the actual deletion
+        root = findNodeAndDelete(root, accountNumber);
+        std::cout << "Account " << accountNumber << " deleted successfully, now updating parent balances." << std::endl;
+        // Pass the node that was deleted to update parent balances
+        updateParentBalances(nodeToDelete);
+        return true;
+    }
+
+    std::cout << "Account " << accountNumber << " not found, deletion failed." << std::endl;
+    return false;  // Account was not found or could not be deleted
+}
 void ForestTree::printTree() const
 {
   if (root == nullptr)
@@ -264,7 +300,6 @@ void ForestTree::printTree() const
   }
 }
 
-// Private helper function
 void ForestTree::printTree(FNodePtr node, int level, string prefix) const
 {
   if (node == nullptr)
@@ -312,7 +347,53 @@ void ForestTree::saveNodeRecursive(ofstream &outFile, FNodePtr node,
 
 void ForestTree::updateParentBalances(FNodePtr node)
 {
-  // Start with the current node and work up the tree
+    std::cout << "Updating parent balances starting from node with account number: " << node->data.getAccountNumber() << std::endl;
+
+    // Recursively update balances for all parents
+    while (node != nullptr)
+    {
+        // Find the parent of the current node
+        FNodePtr parent = findParent(root, node->data.getAccountNumber(), 0);
+
+        if (parent == nullptr)
+        {
+            std::cerr << "No valid parent found for account number " << node->data.getAccountNumber() << std::endl;
+            break; // Stop when reaching a node with no parent (root level)
+        }
+
+        double updatedBalance = 0;
+
+        // Sum up the balances of all children (subaccounts)
+        FNodePtr child = parent->right;
+        while (child != nullptr)
+        {
+            updatedBalance += child->data.getBalance();
+            child = child->left; // Traverse siblings
+        }
+
+        std::cout << "Updating parent account " << parent->data.getAccountNumber()
+                  << " with new balance: " << updatedBalance << std::endl;
+
+        // Update the parent's balance
+        parent->data.setBalance(updatedBalance);
+
+        // Move up to the next level (parent of the current node)
+        node = parent;
+    }
+}
+
+void ForestTree::updateParentBalances(const int &accountNumber)
+{
+  // Find the node corresponding to the current account number
+  FNodePtr node = findNode(root, accountNumber);
+
+  if (node == nullptr)
+  {
+    std::cerr << "Account with number " << accountNumber << " not found!" << std::endl;
+    return;
+  }
+
+  // Recursively update balances for all parents
   while (node != nullptr)
   {
     // Find the parent of the current node
@@ -320,22 +401,27 @@ void ForestTree::updateParentBalances(FNodePtr node)
 
     if (parent == nullptr)
     {
-      std::cerr << "Parent not found for account number " << node->data.getAccountNumber() << std::endl;
-      break; // Stop if there's no parent (root node or no valid parent)
+      std::cerr << "No valid parent found for account number " << node->data.getAccountNumber() << std::endl;
+      break; // Stop when reaching a node with no parent (root level)
     }
 
     double updatedBalance = 0;
 
     // Sum up the balances of all children (subaccounts)
-    for (FNodePtr child = parent->right; child != nullptr; child = child->left)
+    FNodePtr child = parent->right;
+    while (child != nullptr)
     {
       updatedBalance += child->data.getBalance();
+      child = child->left; // Traverse siblings
     }
+
+    cout << "Updating parent account " << parent->data.getAccountNumber()
+         << " with new balance: " << updatedBalance << endl;
 
     // Update the parent's balance
     parent->data.setBalance(updatedBalance);
 
-    // Move up to the next level (parent of current node)
+    // Move up to the next level (parent of the current node)
     node = parent;
   }
 }
@@ -347,7 +433,7 @@ void ForestTree::updateNodeBalance(FNodePtr current, int accountNumber, int delt
   if (parent != nullptr)
   {
     // Step 2: Update the parent balances
-    updateParentBalances(parent);
+    updateParentBalances(accountNumber);
   }
   else
   {
@@ -475,7 +561,6 @@ void ForestTree::saveSubAccounts(ofstream &reportFile,
   reportFile << indentation << "  Balance     : $" << fixed << setprecision(2)
              << node->data.getBalance() << endl;
   reportFile << indentation << endl;
-            
 
   // Recursively handle children and siblings
   saveSubAccounts(reportFile, node->right,

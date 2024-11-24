@@ -1,0 +1,14 @@
+==========================================
+               ACCOUNT REPORT              
+==========================================
+Account Number : 68725
+Description    :  Derogatory depreciation 0
+Balance        : $1000.00
+==========================================
+No subaccounts available for this account.
+TRANSACTIONS
+------------------------------------------
+No transactions available for this account.
+==========================================
+        END OF ACCOUNT REPORT             
+==========================================

@@ -1,0 +1,25 @@
+==========================================
+               ACCOUNT REPORT              
+==========================================
+Account Number : 892
+Description    : testing account
+Balance        : $1200.00
+==========================================
+No subaccounts available for this account.
+TRANSACTIONS
+------------------------------------------
+Transaction ID: 1
+Type           : Debit
+Amount         : $200.00
+------------------------------------------
+Transaction ID: 2
+Type           : Debit
+Amount         : $500.00
+------------------------------------------
+Transaction ID: 3
+Type           : Debit
+Amount         : $300.00
+------------------------------------------
+==========================================
+        END OF ACCOUNT REPORT             
+==========================================

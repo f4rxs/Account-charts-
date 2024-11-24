@@ -10,31 +10,13 @@ using namespace std;
 void readAccountsFromFile(const string &fileName, ForestTree &forestTree);
 int main()
 {
-    ForestTree forestTree;
-
-    string fileName = "resources/accounts.txt";
-    // string fileNameToSaved = "resources/savedAccounts.txt";
-    readAccountsFromFile(fileName, forestTree);
-     forestTree.applyTransaction(68725,(new Transaction(500,'D')));
-    forestTree.generateAccountReport(68);
-    forestTree.printTree();
-
-
-
-
-  
-
-  
-
-  
-
-    return 0;
+    
 }
 
 void readAccountsFromFile(const string &fileName, ForestTree &forestTree)
 {
     string filePath = fileName;
-    cout << "Attempting to open file: "<<filePath << endl;
+    cout << "Attempting to open file: " << filePath << endl;
     // Open the file
     ifstream file(filePath);
     if (!file.is_open())
