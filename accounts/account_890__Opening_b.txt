@@ -1,0 +1,17 @@
+==========================================
+               ACCOUNT REPORT              
+==========================================
+Account Number : 890
+Description    :  Opening balance sheet 0
+Balance        : $200.00
+==========================================
+No subaccounts available for this account.
+TRANSACTIONS
+------------------------------------------
+Transaction ID: 1
+Type           : Debit
+Amount         : $200.00
+------------------------------------------
+==========================================
+        END OF ACCOUNT REPORT             
+==========================================

@@ -8,7 +8,7 @@
 using namespace std;
 
 void loadAccountsFromFile(const string &fileName, ForestTree *forestTree);
-void createEmptyForest(ForestTree *&forestTree);
+ForestTree *createEmptyForest(ForestTree *&forestTree);
 void addAccount(ForestTree *forestTree);
 void addTransaction(ForestTree *forestTree);
 void deleteTransaction(ForestTree *forestTree);
@@ -16,14 +16,16 @@ void deleteAccount(ForestTree *forestTree);
 void printTree(ForestTree *forestTree);
 void generateAccountFileForDetails(ForestTree *forestTree);
 void findAccount(ForestTree *forestTree);
+void saveChartsToFile(ForestTree forestTree, const string &fileName);
 void displayMenu();
 
-int main() {
-  ForestTree *forestTree = new ForestTree(); // Instantiate the tree here for
-                                             // usage across menu options
+int main()
+{
+  ForestTree *forestTree = new ForestTree();
   int choice;
 
-  do {
+  do
+  {
     displayMenu();
     cout << "Enter your choice: ";
     while (!(cin >> choice)) // Handle non-numeric input
@@ -33,9 +35,10 @@ int main() {
       cin.ignore(INT_MAX, '\n'); // Discard invalid input
     }
 
-    switch (choice) {
+    switch (choice)
+    {
     case 1:
-      createEmptyForest(forestTree);
+      forestTree = createEmptyForest(forestTree);
       cout << "Empty forest has been created." << endl;
       break;
     case 2:
@@ -48,9 +51,6 @@ int main() {
       addTransaction(forestTree);
       break;
     case 5:
-      // You can implement deleteTransaction here
-      cout << "Delete transaction functionality is currently being implemented."
-           << endl;
       deleteTransaction(forestTree);
       break;
     case 6:
@@ -64,7 +64,7 @@ int main() {
       break;
     case 9:
       // Save tree to file logic
-      cout << "Save account charts functionality not yet implemented." << endl;
+      saveChartsToFile(*forestTree, "resources/savedAccounts.txt");
       break;
     case 10:
       // Load predefined chart logic
@@ -75,7 +75,7 @@ int main() {
       break;
     case 11:
       // Load from saved file logic
-      cout << "Load from saved file functionality not yet implemented." << endl;
+      loadAccountsFromFile("resources/savedAccounts.txt", forestTree);
       break;
     case 12:
       cout << "Exiting the program. Goodbye!" << endl;
@@ -92,7 +92,8 @@ int main() {
   return 0;
 }
 
-void displayMenu() {
+void displayMenu()
+{
   cout << "\n==============================\n";
   cout << "       Chart of Accounts\n";
   cout << "==============================\n";
@@ -111,18 +112,21 @@ void displayMenu() {
   cout << "==============================\n";
 }
 
-void loadAccountsFromFile(const string &fileName, ForestTree *forestTree) {
+void loadAccountsFromFile(const string &fileName, ForestTree *forestTree)
+{
   string filePath = fileName;
   cout << "Attempting to open file: " << filePath << endl;
   // Open the file
   ifstream file(filePath);
-  if (!file.is_open()) {
+  if (!file.is_open())
+  {
     cerr << "Error: Could not open file " << filePath << endl;
     return;
   }
 
   string line;
-  while (getline(file, line)) {
+  while (getline(file, line))
+  {
     if (line.empty() || line[0] == '#')
       continue; // Ignore empty lines or comments
 
@@ -131,7 +135,8 @@ void loadAccountsFromFile(const string &fileName, ForestTree *forestTree) {
     string description;
     double balance;
 
-    if (ss >> accountNumber) {
+    if (ss >> accountNumber)
+    {
       getline(ss, description, '"');
       getline(ss, description, '"');
       ss >> balance;
@@ -146,13 +151,16 @@ void loadAccountsFromFile(const string &fileName, ForestTree *forestTree) {
   cout << "Accounts loaded successfully from file." << endl;
 }
 
-void createEmptyForest(ForestTree *&forestTree) {
+ForestTree *createEmptyForest(ForestTree *&forestTree)
+{
   delete forestTree;
-  forestTree = new ForestTree();
+  ForestTree *newTree = new ForestTree();
   cout << "Forest tree cleared." << endl;
+  return newTree;
 }
 
-void addAccount(ForestTree *forestTree) {
+void addAccount(ForestTree *forestTree)
+{
   int accountNumber;
   string description;
   double balance;
@@ -179,50 +187,61 @@ void addAccount(ForestTree *forestTree) {
 
   Account newAccount(accountNumber, description, balance);
   bool response = forestTree->insert(newAccount);
-  if (response) {
+  if (response)
+  {
     cout << "Account added successfully!" << endl;
-  } else {
+  }
+  else
+  {
     cout << "Failed to add account." << endl;
   }
 }
 
-void addTransaction(ForestTree *forestTree) {
+void addTransaction(ForestTree *forestTree)
+{
   int accountNumber;
   double amount;
   char type;
 
   cout << "Enter the account number for the transaction: ";
-  while (!(cin >> accountNumber)) {
+  while (!(cin >> accountNumber))
+  {
     cout << "Invalid input! Please enter a valid account number: ";
     cin.clear();
     cin.ignore(INT_MAX, '\n');
   }
 
   cout << "Enter the transaction amount: ";
-  while (!(cin >> amount)) {
+  while (!(cin >> amount))
+  {
     cout << "Invalid input! Please enter a valid amount: ";
     cin.clear();
     cin.ignore(INT_MAX, '\n');
   }
 
-  cout << "Enter the transaction type (e.g., Deposit or Withdrawal): ";
+  cout << "Enter the transaction type (D d for Debit , C c for credit): ";
   cin >> type;
 
-  Transaction transaction(amount, type);
-  bool response = forestTree->applyTransaction(accountNumber, &transaction);
-  if (response) {
+  Transaction *transaction = new Transaction(amount, type);
+  bool response = forestTree->applyTransaction(accountNumber, transaction);
+  if (response)
+  {
     cout << "Transaction applied successfully!" << endl;
-  } else {
+  }
+  else
+  {
     cout << "Failed to apply transaction." << endl;
   }
 }
 
 // delete transaction function
-void deleteTransaction(ForestTree *forestTree) {
+void deleteTransaction(ForestTree *forestTree)
+{
   int accountNumber;
   int transactionId;
   cout << "Enter the account number to delete transaction: ";
-  while (!(cin >> accountNumber)) {
+  while (!(cin >> accountNumber))
+  {
     cout << "Invalid input! Please enter a valid account number: ";
     cin.clear();
     cin.ignore(INT_MAX, '\n');
@@ -230,7 +249,8 @@ void deleteTransaction(ForestTree *forestTree) {
 
   Account account = *forestTree->findAccount(accountNumber);
 
-  if (account.getTransactions().empty()) {
+  if (account.getTransactions().empty())
+  {
     cout << "No transactions found for account number " << accountNumber
          << endl;
     return;
@@ -239,12 +259,16 @@ void deleteTransaction(ForestTree *forestTree) {
   cout << "Transactions for account number " << accountNumber << ":" << endl
        << "--------------------------------" << endl
        << endl;
-  for (const auto *transaction : account.getTransactions()) {
+  for (const auto *transaction : account.getTransactions())
+  {
     cout << "- Transaction ID: " << transaction->getTransactionId() << endl;
+    cout << "- Transaction Ammount: " << transaction->getTransactionAmount() << endl;
+    cout << "- Transaction Type: " << transaction->getTransactionType() << endl;
   }
 
   cout << "Enter the transaction ID to delete: ";
-  while (!(cin >> transactionId)) {
+  while (!(cin >> transactionId))
+  {
     cout << "Invalid input! Please enter a valid transaction ID: ";
     cin.clear();
     cin.ignore(INT_MAX, '\n');
@@ -254,27 +278,34 @@ void deleteTransaction(ForestTree *forestTree) {
 }
 
 // delete account function
-void deleteAccount(ForestTree *forestTree) {
+void deleteAccount(ForestTree *forestTree)
+{
   int accountNumber;
   cout << "Enter the account number to delete: ";
-  while (!(cin >> accountNumber)) {
+  while (!(cin >> accountNumber))
+  {
     cout << "Invalid input! Please enter a valid account number: ";
     cin.clear();
     cin.ignore(INT_MAX, '\n');
   }
 
   bool response = forestTree->deleteAccount(accountNumber);
-  if (response) {
+  if (response)
+  {
     cout << "Account deleted successfully!" << endl;
-  } else {
+  }
+  else
+  {
     cout << "Failed to delete account." << endl;
   }
 }
 
-void findAccount(ForestTree *forestTree) {
+void findAccount(ForestTree *forestTree)
+{
   int accountNumber;
   cout << "Enter the account number to find: ";
-  while (!(cin >> accountNumber)) {
+  while (!(cin >> accountNumber))
+  {
     cout << "Invalid input! Please enter a valid account number: ";
     cin.clear();
     cin.ignore(INT_MAX, '\n');
@@ -282,21 +313,38 @@ void findAccount(ForestTree *forestTree) {
 
   Account *account = forestTree->findAccount(
       accountNumber); // Assuming findAccount method exists
-  if (account) {
+  if (account)
+  {
     cout << "Account found: " << *account
          << endl; // Assuming Account has an overloaded << operator
-  } else {
+  }
+  else
+  {
     cout << "Account not found." << endl;
   }
 }
 
-void printTree(ForestTree *forestTree) {
+void printTree(ForestTree *forestTree)
+{
   cout << "Printing tree:" << endl;
   forestTree->printTree(); // Assuming ForestTree has a print method
 }
 
-void generateAccountFileForDetails(ForestTree *forestTree) {
-  cout << "Generating account file (stub function, implement as needed)."
-       << endl;
-  // Implement file generation logic here
+void saveChartsToFile(ForestTree forestTree, const string &fileName)
+{
+  string savePath = fileName;
+  forestTree.saveToFile(fileName);
+}
+
+void generateAccountFileForDetails(ForestTree *forestTree)
+{
+  int accountNumber;
+  cout << "Enter the account number to find: ";
+  while (!(cin >> accountNumber))
+  {
+    cout << "Invalid input! Please enter a valid account number: ";
+    cin.clear();
+    cin.ignore(INT_MAX, '\n');
+  }
+  forestTree->generateAccountReport(accountNumber);
 }
